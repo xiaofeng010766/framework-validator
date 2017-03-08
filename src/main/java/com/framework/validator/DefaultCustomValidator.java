@@ -13,10 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -31,7 +28,8 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
      * logger 日志
      */
     private static Logger logger = LoggerFactory.getLogger(BaseValidator.class);
-
+    /**数字类型标识**/
+    private static final String SIGN = "sign";
     /**
      * Exception Message List
      */
@@ -112,6 +110,10 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
          * MESSAGE_MINLENGTH:该项目不能小于{0}位！
          */
         public String MESSAGE_REGEX = "validator.message.regex";
+        /**
+         * MESSAGE_BETWEEN_LENGTH:数值最大长度{0}位，且小数点最大保留{1}位
+         */
+        public String MESSAGE_BETWEEN_LENGTH = "validator.message.betweenLength";
     }
 
     /**
@@ -470,7 +472,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验整数（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param sheetName Excel Sheet 名称
      * @param rowNum    行号
@@ -486,7 +488,9 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
             return;
         }
         if (!NumberValidator.checkInteger(value, sign)) {
-            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_NUMBER, null, sheetName);
+            List<String> args = new ArrayList<>();
+            args.add(SIGN+StringUtils.toString(sign));
+            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_NUMBER, args.toArray(new String[args.size()]), sheetName);
         }
         if (!NumberValidator.validatorIntegerBetween(value, maxNum, minNum)) {
             this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_BETWEEN, ValidatorUtils.getIntegerBetween(maxNum, minNum), sheetName);
@@ -495,7 +499,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验整数（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param rowNum    行号
      * @param fieldName 字段名称
@@ -511,7 +515,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验整数（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param fieldName 字段名称
      * @param value     需要验证的值
@@ -526,7 +530,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验整数（Integer类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param sheetName Excel Sheet 名称
      * @param rowNum    行号
@@ -545,7 +549,9 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
             this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_NUMBER, null, sheetName);
         }
         if (!NumberValidator.checkInteger(String.valueOf(value), sign)) {
-            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_NUMBER, null, sheetName);
+            List<String> args = new ArrayList<>();
+            args.add(SIGN+StringUtils.toString(sign));
+            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_NUMBER, args.toArray(new String[args.size()]), sheetName);
         }
         if (!NumberValidator.validatorIntegerBetween(String.valueOf(value), maxNum, minNum)) {
             this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_BETWEEN, ValidatorUtils.getIntegerBetween(maxNum, minNum), sheetName);
@@ -554,7 +560,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验整数（Integer类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param rowNum    行号
      * @param fieldName 字段名称
@@ -570,7 +576,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验整数（Integer类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param fieldName 字段名称
      * @param value     需要验证的值
@@ -585,7 +591,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验Long整数（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param sheetName Excel Sheet 名称
      * @param rowNum    行号
@@ -601,7 +607,9 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
             return;
         }
         if (!NumberValidator.checkInteger(value, sign)) {
-            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_NUMBER, null, sheetName);
+            List<String> args = new ArrayList<>();
+            args.add(SIGN+StringUtils.toString(sign));
+            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_NUMBER, args.toArray(new String[args.size()]), sheetName);
         }
         if (!NumberValidator.validatorLongBetween(value, maxNum, minNum)) {
             this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_BETWEEN, ValidatorUtils.getLongBetween(maxNum, minNum), sheetName);
@@ -610,7 +618,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验Long整数（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param rowNum    行号
      * @param fieldName 字段名称
@@ -626,7 +634,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验Long整数（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param fieldName 字段名称
      * @param value     需要验证的值
@@ -641,7 +649,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验Long整数（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param sheetName Excel Sheet 名称
      * @param rowNum    行号
@@ -661,7 +669,9 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
         }
 
         if (!NumberValidator.checkInteger(String.valueOf(value), sign)) {
-            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_NUMBER, null, sheetName);
+            List<String> args = new ArrayList<>();
+            args.add(SIGN+StringUtils.toString(sign));
+            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_NUMBER,args.toArray(new String[args.size()]) , sheetName);
         }
         if (!NumberValidator.validatorLongBetween(String.valueOf(value), maxNum, minNum)) {
             this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_BETWEEN, ValidatorUtils.getLongBetween(maxNum, minNum), sheetName);
@@ -670,7 +680,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验Long整数（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param rowNum    行号
      * @param fieldName 字段名称
@@ -686,7 +696,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验Long整数（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param fieldName 字段名称
      * @param value     需要验证的值
@@ -701,7 +711,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验BigDecimal类型（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param sheetName Excel Sheet 名称
      * @param rowNum    行号
@@ -718,16 +728,21 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
         }
 
         if (!NumberValidator.checkDecimal(value, sign)) {
-            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_DECIMAL, null, sheetName);
+            List<String> args = new ArrayList<>();
+            args.add(SIGN+StringUtils.toString(sign));
+            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_DECIMAL, args.toArray(new String[args.size()]), sheetName);
         }
         if (!NumberValidator.validatorDecimalBetween(value, maxM, maxD)) {
-            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_BETWEEN, null, sheetName);
+            List<String> args = new ArrayList<>();
+            args.add(StringUtils.toString(maxM));
+            args.add(StringUtils.toString(maxD));
+            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_BETWEEN_LENGTH, args.toArray(new String[args.size()]), sheetName);
         }
     }
 
     /**
      * 校验BigDecimal类型（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param rowNum    行号
      * @param fieldName 字段名称
@@ -743,7 +758,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验BigDecimal类型（String类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param fieldName 字段名称
      * @param value     需要验证的值
@@ -758,7 +773,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验BigDecimal类型（BigDecimal类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param sheetName Excel Sheet 名称
      * @param rowNum    行号
@@ -777,16 +792,21 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
             this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_REQUIREDNUMBER, null, sheetName);
         }
         if (!NumberValidator.checkDecimal(String.valueOf(value), sign)) {
-            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_DECIMAL, null, sheetName);
+            List<String> args = new ArrayList<>();
+            args.add(SIGN+StringUtils.toString(sign));
+            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_DECIMAL, args.toArray(new String[args.size()]), sheetName);
         }
         if (!NumberValidator.validatorDecimalBetween(String.valueOf(value), maxM, maxD)) {
-            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_BETWEEN, null, sheetName);
+            List<String> args = new ArrayList<>();
+            args.add(StringUtils.toString(maxM));
+            args.add(StringUtils.toString(maxD));
+            this.addErrorMessage(rowNum, fieldName, Validator.MESSAGE_BETWEEN_LENGTH, args.toArray(new String[args.size()]), sheetName);
         }
     }
 
     /**
      * 校验BigDecimal类型（BigDecimal类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param rowNum    行号
      * @param fieldName 字段名称
@@ -802,7 +822,7 @@ public abstract class DefaultCustomValidator<T extends Serializable> implements 
 
     /**
      * 校验BigDecimal类型（BigDecimal类型）<br/>
-     * sign ：1 表示可以为0;2 表示可以为负数;3 表示是非正数;4 表示可以为正数;5 表示是非负数;6 表示不能为0;7 表示可以为所有数
+     * sign ：1 表示为0;2 表示为负数;3 表示是非正数;4 表示为正数;5 表示是非负数;6 表示不能为0;7 表示为所有数
      *
      * @param fieldName 字段名称
      * @param value     需要验证的值

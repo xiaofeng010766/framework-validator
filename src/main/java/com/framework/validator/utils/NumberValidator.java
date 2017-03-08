@@ -110,21 +110,26 @@ public final class NumberValidator {
      * @param minValue 最小值
      */
     public static boolean validatorIntegerBetween(String value, Integer maxValue, Integer minValue) {
+        Boolean integer;
         if (ValidatorUtils.isNull(value)) {
             return false;
         }
-        if (DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Integer.MAX_VALUE)) >= NumberConst.IntDef.INT_ZERO
-                || DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Integer.MIN_VALUE)) <= NumberConst.IntDef.INT_ZERO) {
+        if (DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Integer.MAX_VALUE)) > NumberConst.IntDef.INT_ZERO
+                || DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Integer.MIN_VALUE)) < NumberConst.IntDef.INT_ZERO) {
             return false;
         }
         if (null != maxValue) {
-            return !(Integer.valueOf(value) >= maxValue);
+            integer = (Integer.valueOf(value) <= maxValue);
+        } else {
+            integer = (Integer.valueOf(value) <= Integer.MAX_VALUE);
         }
 
         if (null != minValue) {
-            return !(Integer.valueOf(value) <= minValue);
+            integer = integer && (Integer.valueOf(value) >= minValue);
+        } else {
+            integer = integer && (Integer.valueOf(value) >= Integer.MIN_VALUE);
         }
-        return true;
+        return integer;
     }
 
     /**
@@ -135,6 +140,7 @@ public final class NumberValidator {
      * @param minValue 最小值
      */
     public static boolean validatorLongBetween(String value, Long maxValue, Long minValue) {
+        Boolean validatorLong;
         if (ValidatorUtils.isNull(value)) {
             return false;
         }
@@ -143,13 +149,17 @@ public final class NumberValidator {
             return false;
         }
         if (null != maxValue) {
-            return !(Long.valueOf(value) >= maxValue);
+            validatorLong = (Long.valueOf(value) <= maxValue);
+        } else {
+            validatorLong = (Long.valueOf(value) <= Long.MAX_VALUE);
         }
 
         if (null != minValue) {
-            return !(Long.valueOf(value) <= minValue);
+            validatorLong = validatorLong && (Long.valueOf(value) >= minValue);
+        } else {
+            validatorLong = validatorLong && (Long.valueOf(value) >= Long.MIN_VALUE);
         }
-        return true;
+        return validatorLong;
     }
 
     /**
@@ -204,9 +214,9 @@ public final class NumberValidator {
      * 检验证书
      *
      * @param value       需要验证的整数类型字符串
-     * @param canPositive 是否可以为正整数
-     * @param canNegative 是否可以为负整数
-     * @param canZero     是否可以为0
+     * @param canPositive 是否为正整数
+     * @param canNegative 是否为负整数
+     * @param canZero     是否为0
      * @return
      */
     public static boolean checkInteger(String value, boolean canPositive, boolean canNegative, boolean canZero) {
