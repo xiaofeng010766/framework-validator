@@ -1,7 +1,6 @@
 package com.framework.validator.utils;
 
-import com.framework.base.consts.NumberConst;
-import com.framework.base.consts.StringConst;
+import com.framework.core.constant.StringConst;
 import com.framework.core.utils.DecimalUtils;
 
 import java.math.BigDecimal;
@@ -114,8 +113,8 @@ public final class NumberValidator {
         if (ValidatorUtils.isNull(value)) {
             return false;
         }
-        if (DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Integer.MAX_VALUE)) > NumberConst.IntDef.INT_ZERO
-                || DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Integer.MIN_VALUE)) < NumberConst.IntDef.INT_ZERO) {
+        if (DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Integer.MAX_VALUE)) > 0
+                || DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Integer.MIN_VALUE)) < 0) {
             return false;
         }
         if (null != maxValue) {
@@ -144,8 +143,8 @@ public final class NumberValidator {
         if (ValidatorUtils.isNull(value)) {
             return false;
         }
-        if (DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Long.MAX_VALUE)) >= NumberConst.IntDef.INT_ZERO
-                || DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Long.MIN_VALUE)) <= NumberConst.IntDef.INT_ZERO) {
+        if (DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Long.MAX_VALUE)) >= 0
+                || DecimalUtils.toBigDecimal(value).compareTo(DecimalUtils.toBigDecimal(Long.MIN_VALUE)) <= 0) {
             return false;
         }
         if (null != maxValue) {
@@ -176,8 +175,8 @@ public final class NumberValidator {
         BigDecimal digitValue = new BigDecimal(value);
         value = digitValue.abs().toPlainString();
         String[] splitValue = value.split("\\.");
-        String beforeDot = splitValue[NumberConst.IntDef.INT_ZERO];
-        String afterDot = splitValue.length == NumberConst.IntDef.INT_TWO ? splitValue[NumberConst.IntDef.INT_ONE] : "";
+        String beforeDot = splitValue[0];
+        String afterDot = splitValue.length == 2 ? splitValue[1] : "";
         if (!validatorDecimalLength(beforeDot, maxM - maxD) || !validatorDecimalLength(afterDot, maxD)) {
             return false;
         }
@@ -206,8 +205,8 @@ public final class NumberValidator {
      * @return
      */
     public static boolean checkInteger(String value, int sign) {
-        return checkInteger(value, (sign & POSITIVE) > NumberConst.IntDef.INT_ZERO,
-                (sign & NEGATIVE) > NumberConst.IntDef.INT_ZERO, (sign & ZERO) > NumberConst.IntDef.INT_ZERO);
+        return checkInteger(value, (sign & POSITIVE) > 0,
+                (sign & NEGATIVE) > 0, (sign & ZERO) > 0);
     }
 
     /**
@@ -249,8 +248,8 @@ public final class NumberValidator {
      * @return
      */
     public static boolean checkDecimal(String value, int sign) {
-        return checkDecimal(value, (sign & POSITIVE) > NumberConst.IntDef.INT_ZERO,
-                (sign & NEGATIVE) > NumberConst.IntDef.INT_ZERO, (sign & ZERO) > NumberConst.IntDef.INT_ZERO);
+        return checkDecimal(value, (sign & POSITIVE) > 0,
+                (sign & NEGATIVE) > 0, (sign & ZERO) > 0);
     }
 
     /**
